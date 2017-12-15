@@ -56,8 +56,8 @@ void initScreen()
 		obs[i].row = g_iGround;
 		obs[i].col = COLS;
 
-		while(i > 0 && obs[i].col - obs[i - 1].col < 20)
-			obs[i].col = COLS + (20 * (rand() % 4 + 1));
+		while(i > 0 && abs(obs[i].col - obs[i - 1].col) < 16)
+			obs[i].col = COLS + (16 * (rand() % 7 + 1));
 	}
 }
 
@@ -123,11 +123,14 @@ void hMapRefresher(int signum)
 				}
 				else
 				{
-					move(obs[i].row - 3, 0);
-					vline(' ', 3);
+					if(obs[i].col == -1)
+					{
+						move(obs[i].row - 3, 0);
+						vline(' ', 3);
+					}
 
 					if(obs[i].col < -19)
-                                                obs[i].col = COLS + (20 * (rand() % 4 + 1));
+                                                obs[i].col = COLS + (16 * (rand() % 7 + 1));
 				}
 				obs[i].col--;
 				break;
@@ -145,7 +148,7 @@ void hMapRefresher(int signum)
 					if(obs[i].col > -5)
 						mvaddch(obs[i].row - 3, obs[i].col + 4, ' ');
 					if(obs[i].col < -19)
-                                                obs[i].col = COLS + (20 * (rand() % 4 + 1));
+                                                obs[i].col = COLS + (16 * (rand() % 7 + 1));
 				}
 				obs[i].col--;
 				break;
