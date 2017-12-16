@@ -41,7 +41,7 @@ int main()
 
 
 	signal(SIGALRM, move_character);
-	set_ticker(200);
+	set_ticker(100);
 
 	while(!done)
 		pause();
@@ -54,10 +54,8 @@ void input_handler(int snum)
 {
 	int c;
 	char * cp = (char *)kbcbuf.aio_buf;
-	
-//	if(aio_error(&kbcbuf) != 0)
-//		perror("reading failed");
-//	else
+
+	if(aio_error(&kbcbuf) == 0)	
 		if(aio_return(&kbcbuf) == 1)
 		{
 			c = *cp;
