@@ -18,14 +18,19 @@ extern struct aiocb kbcbuf;
 
 char print_menu();
 void game_start();
+<<<<<<< HEAD
 void initScreen();
+=======
+void print_rank();
+
+>>>>>>> 9a5f331c0818d14a5db9f23257eb01931ff7fc8e
 int done = 0;
 
 int main()
 {
 	int c;
 	char select;
-
+	int mode=2; //기본
 	tty_mode(0);
 	set_cr_noecho_mode();
 	set_nodelay_mode();
@@ -33,27 +38,28 @@ int main()
 	initscr();
 	clear();
 	refresh();
+	while(1){
+		select = print_menu();
 
-	select = print_menu();
-
-	initScreen();
-	switch(select)
-	{
-		case '1':
-			game_start();
-			break;
-		case '2':
-			tty_mode(1);
-			break;
-		case '3':
-			tty_mode(1);
-			break;
-		case '4':
-			tty_mode(1);
-			break;
-		case '5':
-			tty_mode(1);
-			exit(1);
+		initScreen();
+		switch(select)
+		{
+			case '1':
+				game_start();
+				break;
+			case '2':
+				mode=selectMode(mode);
+				break;
+			case '3':
+				print_rank();
+				break;
+			case '4':
+				print_help_key();
+				break;
+			case '5':
+				tty_mode(1);
+				exit(1);
+		}
 	}
 }
 
