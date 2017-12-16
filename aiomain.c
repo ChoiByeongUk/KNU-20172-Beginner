@@ -30,27 +30,27 @@ int main()
 	initscr();
 	clear();
 	refresh();
+	while(1){
+		select = print_menu();
 
-	select = print_menu();
-
-	initScreen();
-	switch(select)
-	{
-		case '1':
-			game_start();
-			break;
-		case '2':
-			tty_mode(1);
-			break;
-		case '3':
-			tty_mode(1);
-			break;
-		case '4':
-			tty_mode(1);
-			break;
-		case '5':
-			tty_mode(1);
-			exit(1);
+		initScreen();
+		switch(select)
+		{
+			case '1':
+				game_start();
+				break;
+			case '2':
+				break;
+			case '3':
+				
+				break;
+			case '4':
+				print_help_key();
+				break;
+			case '5':
+				tty_mode(1);
+				exit(1);
+		}
 	}
 }
 
