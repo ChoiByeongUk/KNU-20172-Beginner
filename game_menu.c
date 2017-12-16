@@ -10,7 +10,7 @@
 #include "character.h"
 #define CHECK addch('o');
 
-void game_start();
+void game_start(int);
 char print_menu();
 void input_handler(int);
 void ctrl_c_handler(int);
@@ -18,23 +18,25 @@ void setup_aio_buffer();
 struct aiocb kbcbuf;
 void tty_mode(int);
 void set_nodelay_mode();
+void set_ticker(int);
 extern int done;
 void alarm_handler(int);
+void init_character_info();
 
-void game_start()
+void game_start(int ease)
 {
 	clear();
 	refresh();
 
 	signal(SIGINT, ctrl_c_handler);
-
+	set_nodelay_mode();
 	signal(SIGIO, input_handler);
 	setup_aio_buffer();
 	aio_read(&kbcbuf);
 	
 	init_character_info();
 	signal(SIGALRM, alarm_handler);
-	set_ticker(100);
+	set_ticker(100/ease);
 
 	while(!done)
 		pause();

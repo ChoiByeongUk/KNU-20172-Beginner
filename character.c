@@ -9,26 +9,41 @@ void show_character(int dist)
 	int cnt = 0;
 	int i, j;
 	int k;
-	for(k=0; k<2; k++)
+
+	if(characterInfo.state == SLIDING)
 	{
-		characterInfo.ypos -= dist;
-			for(i=0; i<3; i++)
-			{
-				for(j=0; j<3; j++)
+		move(characterInfo.ypos, 5);
+		addstr("--O");
+		move(LINES-1, COLS-1);
+		refresh();
+		usleep(50000);
+	}
+
+	else
+	{
+		for(k=0; k<2; k++)
+		{
+			characterInfo.ypos -= dist;
+				for(i=0; i<3; i++)
 				{
-					move(characterInfo.ypos - 2 + i, 5 + j);
-					addch(characterInfo.character[i][j]);
+					for(j=0; j<3; j++)
+					{
+						move(characterInfo.ypos - 2 + i, 5 + j);
+						addch(characterInfo.character[i][j]);
+					}
 				}
-			}
-			move(LINES-1, COLS-1);	
-			refresh();
-			usleep(100);
-			for(i=0; i<3; i++)
-			{
-				move(characterInfo.ypos-2+i, 5);
-				addstr("   ");
-			}
-		characterInfo.ypos += dist;
+
+				move(LINES-1, COLS-1);	
+				refresh();
+
+				for(i=0; i<3; i++)
+				{
+					move(characterInfo.ypos-2+i, 5);
+					addstr("   ");
+				}
+				usleep(5000);
+			characterInfo.ypos += dist;
+		}
 	}
 }
 
