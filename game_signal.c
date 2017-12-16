@@ -37,10 +37,9 @@ void alarm_handler(int signum)
 {
 	signal(SIGALRM, SIG_IGN);
 	initscr();
-	//move_character();
-	//refresh();
 	hMapRefresher(signum);
 	refresh();
+
 	move_character();
 	signal(SIGALRM, alarm_handler);
 }
