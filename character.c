@@ -12,7 +12,7 @@ void show_character(int dist)
 	int k;
 	for(k=0; k<2; k++)
 	{
-		while(cnt < 6)
+		while(cnt < 3)
 		{
 			cnt++;
 
@@ -27,7 +27,7 @@ void show_character(int dist)
 
 			move(0, COLS-1);
 			refresh();
-			usleep(7000);
+			usleep(3000);
 
 			for(i=0; i<3; i++)
 			{
