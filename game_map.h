@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
-
+#include "game_signal.h"
 /***************************************************************
  * variable declaration
  */
@@ -27,7 +27,6 @@ obstacle obs[MAX_OBSTACLES];
  * function declaration
  */
 
-void set_ticker(int);
 void initScreen();
 void restoreScreen();
 void addObstacle(int type, int r, int c);
@@ -38,16 +37,17 @@ void addObstacle(int type, int r, int c);
 
 void initScreen()
 {
-	initscr();
-	cbreak();
-	noecho();
+//	initscr();
+//	cbreak();
+//	noecho();
 	srand(time(NULL));
 	
 	// alarm handling
 	void hMapRefresher(int);
-	signal(SIGALRM, hMapRefresher);
-	set_ticker(70);
+//	signal(SIGALRM, hMapRefresher);
+//	set_ticker(70);
 
+//	hMapRefresher(1);
 	// initialize obstacles
 	g_iGround = (int)((double)LINES / 10 * 9);
 	for(int i = 0; i < MAX_OBSTACLES; i++)
@@ -76,19 +76,19 @@ void addObstacle(int type, int r, int c)
 		// vertical obstacle
 		case 1:
 		{
-			move(r - 3, c);
-			vline('*', 3);
-			move(r - 3, c + 1);
-			vline(' ', 3);
+			move(r - 2, c);
+			vline('*', 2);
+			move(r - 2, c + 1);
+			vline(' ', 2);
 
 			break;
 		}
 		// horizontal obstacle
 		case 2:
 		{
-			move(r - 3, c);
+			move(r - 2, c);
 			hline('*', 4);
-			mvaddch(r - 3, c + 4, ' ');
+			mvaddch(r - 2, c + 4, ' ');
 
 			break;
 		}
@@ -100,8 +100,8 @@ void addObstacle(int type, int r, int c)
 // refresh map at every tick
 void hMapRefresher(int signum)
 {
-	signal(SIGALRM, SIG_IGN);
-	initscr();
+//	signal(SIGALRM, SIG_IGN);
+//	initscr();
 
 	// draw ground
 	g_iGround = (int)((double)LINES / 10 * 9);
@@ -159,5 +159,5 @@ void hMapRefresher(int signum)
 
 	move(LINES - 1, COLS - 1);
 	refresh();
-	signal(SIGALRM, hMapRefresher);
+//	signal(SIGALRM, hMapRefresher);
 }

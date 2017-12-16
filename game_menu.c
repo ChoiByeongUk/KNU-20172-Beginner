@@ -4,14 +4,74 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <curses.h>
-
+#include <signal.h>
+#include <aio.h>
+#include <unistd.h>
+#include "character.h"
+#include "game_signal.h"
 #define CHECK addch('o');
-int main(void){
-	
-	char  menu;
+
+void game_start();
+char print_menu();
+void input_handler(int);
+void ctrl_c_handler(int);
+void setup_aio_buffer();
+struct aiocb kbcbuf;
+void tty_mode(int);
+void set_nodelay_mode();
+extern int done;
+
+void game_start()
+{
+	init_character_info();
 	initscr();
-	crmode();
-	noecho();
+	clear();
+	refresh();
+
+	set_nodelay_mode();	
+	signal(SIGINT, ctrl_c_handler);
+
+	signal(SIGIO, input_handler);
+	setup_aio_buffer();
+	aio_read(&kbcbuf);
+
+	signal(SIGALRM, move_character);
+	set_ticker(100);
+
+	while(!done)
+		pause();
+
+	tty_mode(1);
+	endwin();
+}
+
+void input_handler(int snum)
+{
+	int c;
+	char * cp = (char *)kbcbuf.aio_buf;
+
+	if(aio_error(&kbcbuf) == 0)	
+		if(aio_return(&kbcbuf) == 1)
+		{
+			c = *cp;
+			if(c == 'Q' || c == EOF)
+				done = 1;
+			else if(c == ' ')
+				characterInfo.state = JUMPING;
+			else if(c == 'z')
+				characterInfo.state = SLIDING;
+		}
+	aio_read(&kbcbuf);
+}
+
+void ctrl_c_handler(int signum)
+{
+	tty_mode(1);
+	exit(1);
+}
+
+char print_menu(void){
+	char menu;
 	while(1){
 		clear();
 		move(5,4);
@@ -200,13 +260,22 @@ int main(void){
 		move(16,10);
 		menu=getchar();
 		
-		switch(menu){
-			case '1' : game_start();
-				   break;
-			case '5' : endwin();
-				   exit(1);
-		}
+		if(menu >= '1' && menu <= '5')
+			return menu;
 
 	}
 	return 0;
-}	
+}
+void setup_aio_buffer()
+{
+	static char input[1];
+
+	kbcbuf.aio_fildes = 0;
+	kbcbuf.aio_buf = input;
+	kbcbuf.aio_nbytes = 1;
+	kbcbuf.aio_offset = 0;
+
+	kbcbuf.aio_sigevent.sigev_notify = SIGEV_SIGNAL;
+	kbcbuf.aio_sigevent.sigev_signo = SIGIO;
+}
+
