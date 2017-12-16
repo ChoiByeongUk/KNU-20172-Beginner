@@ -39,14 +39,12 @@ void addObstacle(int type, int r, int c);
 void initScreen()
 {
 	initscr();
-	cbreak();
-	noecho();
 	srand(time(NULL));
 	
 	// alarm handling
-	void hMapRefresher(int);
-	signal(SIGALRM, hMapRefresher);
-	set_ticker(70);
+	//void hMapRefresher(int);
+	//signal(SIGALRM, hMapRefresher);
+	//set_ticker(70);
 
 	// initialize obstacles
 	g_iGround = (int)((double)LINES / 10 * 9);
@@ -93,7 +91,6 @@ void addObstacle(int type, int r, int c)
 // refresh map at every tick
 void hMapRefresher(int signum)
 {
-	signal(SIGALRM, SIG_IGN);
 	initscr();
 
 	// draw ground
@@ -104,6 +101,7 @@ void hMapRefresher(int signum)
 	// refresh obstacles
 	for(int i = 0; i < MAX_OBSTACLES; i++)
 	{
+		obs[i].row = g_iGround;
 		switch(obs[i].type)
 		{
 			// vertical obstacle
@@ -151,6 +149,4 @@ void hMapRefresher(int signum)
 	}
 
 	move(LINES - 1, COLS - 1);
-	refresh();
-	signal(SIGALRM, hMapRefresher);
 }

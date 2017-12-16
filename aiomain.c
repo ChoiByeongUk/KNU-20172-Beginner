@@ -10,16 +10,17 @@
 #include <sys/time.h>
 #include "character.h"
 #include "game_signal.h"
-#include "game_map.h"
 
 void tty_mode(int);
 void set_cr_noecho_mode();
 void set_nodelay_mode();
+extern struct aiocb kbcbuf;
+
 char print_menu();
 void game_start();
-void restoreScreen();
+void initScreen();
 int done = 0;
-extern struct aiocb kbcbuf;
+
 int main()
 {
 	int c;
@@ -27,6 +28,8 @@ int main()
 
 	tty_mode(0);
 	set_cr_noecho_mode();
+	set_nodelay_mode();
+
 	initscr();
 	clear();
 	refresh();

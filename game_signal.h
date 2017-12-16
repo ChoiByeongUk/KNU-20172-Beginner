@@ -1,2 +1,3 @@
 int set_ticker(int);
-void proceed(int );
+void alarm_handler(int);
+//void proceed(int );

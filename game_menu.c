@@ -20,29 +20,30 @@ struct aiocb kbcbuf;
 void tty_mode(int);
 void set_nodelay_mode();
 extern int done;
+void alarm_handler(int);
 
 void game_start()
 {
-	init_character_info();
 	initscr();
 	clear();
 	refresh();
 
-	set_nodelay_mode();	
 	signal(SIGINT, ctrl_c_handler);
 
 	signal(SIGIO, input_handler);
 	setup_aio_buffer();
 	aio_read(&kbcbuf);
-
-	signal(SIGALRM, move_character);
+	
+	init_character_info();
+	signal(SIGALRM, alarm_handler);
 	set_ticker(100);
 
 	while(!done)
 		pause();
 
-	tty_mode(1);
+	clear();
 	endwin();
+	tty_mode(1);
 }
 
 void input_handler(int snum)
@@ -66,6 +67,8 @@ void input_handler(int snum)
 
 void ctrl_c_handler(int signum)
 {
+	clear();
+	endwin();
 	tty_mode(1);
 	exit(1);
 }
@@ -266,6 +269,7 @@ char print_menu(void){
 	}
 	return 0;
 }
+
 void setup_aio_buffer()
 {
 	static char input[1];

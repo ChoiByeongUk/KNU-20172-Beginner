@@ -5,12 +5,6 @@
 #include "character.h"
 #include "game_signal.h"
 
-<<<<<<< HEAD
-extern int g_iGround;
-
-=======
-void hMapRefresher();
->>>>>>> 078cd0c66f943326179f6fcdf8aa6dea57b0dd0d
 void show_character(int dist)
 {
 	int cnt = 0;
@@ -28,15 +22,13 @@ void show_character(int dist)
 				}
 			}
 
-			move(0, COLS-1);
-			refresh();
 			for(i=0; i<3; i++)
 			{
 				move(characterInfo.ypos-2+i, 5);
 				addstr("   ");
 			}
 		characterInfo.ypos += dist;
-		usleep(5000);
+		usleep(5000)ear
 	}
 }
 
@@ -44,7 +36,6 @@ void move_character()
 {
 	void input_handler(int);
 	int movedir = 0;
-	signal(SIGALRM, SIG_IGN);
 	switch(characterInfo.state)
 	{
 		case JUMPING:
@@ -62,10 +53,10 @@ void move_character()
 	}
 	show_character(movedir);
 
-	hMapRefresher(1);
 	init_character_info();
-	signal(SIGALRM, move_character);
 }
+
+extern int g_iGround;
 
 void init_character_info()
 {
@@ -79,11 +70,7 @@ void init_character_info()
 	characterInfo.character[2][1] = ' ';
 	characterInfo.character[2][2] = '\\';
 
-<<<<<<< HEAD
-	//characterInfo.ypos = LINES-3;
-	characterInfo.ypos = g_iGround;
-=======
-	characterInfo.ypos = LINES-4;
->>>>>>> 078cd0c66f943326179f6fcdf8aa6dea57b0dd0d
+	//characterInfo.ypos = g_iGround - 2;
+	characterInfo.ypos = 30;
 	characterInfo.state = STANDING;
 }
