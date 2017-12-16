@@ -10,21 +10,23 @@
 #include <sys/time.h>
 #include "character.h"
 #include "game_signal.h"
+#include "game_map.h"
 
 void tty_mode(int);
 void set_cr_noecho_mode();
 void set_nodelay_mode();
-extern struct aiocb kbcbuf;
-
 char print_menu();
 void game_start();
+<<<<<<< HEAD
 void initScreen();
+=======
+>>>>>>> c46ddbaf06cedc08f12e3641fdfbcdc2a7eba454
 void print_rank();
 int selectMode(int mode);
 void print_help_key(void);
 
 int done = 0;
-
+extern struct aiocb kbcbuf;
 int main()
 {
 	int c;
@@ -32,8 +34,6 @@ int main()
 	int mode=2; //기본
 	tty_mode(0);
 	set_cr_noecho_mode();
-	set_nodelay_mode();
-
 	initscr();
 	clear();
 	refresh();
@@ -56,7 +56,9 @@ int main()
 				print_help_key();
 				break;
 			case '5':
+				endwin();
 				tty_mode(1);
+				
 				exit(1);
 		}
 	}
