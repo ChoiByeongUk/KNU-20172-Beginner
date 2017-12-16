@@ -6,10 +6,13 @@
 #include <stdio.h>
 #include <curses.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
+#include <signal.h>
 #include <sys/time.h>
 
-char g_smap[100][100];
-
+int set_ticker(int);
+void alarm_handler(int);
 
 int set_ticker(int n_msecs)
 {
@@ -26,6 +29,24 @@ int set_ticker(int n_msecs)
 
 	return setitimer(ITIMER_REAL, &new_timeset,NULL);
 }
+
+void hMapRefresher(int);
+void move_character();
+
+void alarm_handler(int signum)
+{
+	signal(SIGALRM, SIG_IGN);
+	initscr();
+	//move_character();
+	//refresh();
+	hMapRefresher(signum);
+	refresh();
+	move_character();
+	signal(SIGALRM, alarm_handler);
+}
+
+/*
+char g_smap[100][100];
 
 void proceed(int signum)//각 시간초마다 맵움직임 및 처리호출 및 죽음확인
 {
@@ -102,4 +123,4 @@ void proceed_map(){
 	g_smap[LINES-1][COLS]='-';
 	g_smap[LINES-2][COLS]='-';
 	g_smap[next_position][COLS]=next_char;
-}
+}*/

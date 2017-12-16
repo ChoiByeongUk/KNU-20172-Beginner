@@ -1,10 +1,6 @@
 #include <curses.h>
 #include <stdio.h>
 #include "rank.h"
-<<<<<<< HEAD
-
-=======
->>>>>>> c46ddbaf06cedc08f12e3641fdfbcdc2a7eba454
 user ranking[10];
 
 void print_back_menu(void)
