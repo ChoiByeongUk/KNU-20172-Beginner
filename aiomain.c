@@ -19,7 +19,7 @@ void set_nodelay_mode();
 //void setup_aio_buffer();
 char print_menu();
 void game_start();
-
+void restoreScreen();
 int done = 0;
 extern struct aiocb kbcbuf;
 int main()

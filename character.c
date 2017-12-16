@@ -5,6 +5,8 @@
 #include "character.h"
 #include "game_signal.h"
 
+extern int g_iGround;
+
 void show_character(int dist)
 {
 	int cnt = 0;
@@ -72,6 +74,7 @@ void init_character_info()
 	characterInfo.character[2][1] = ' ';
 	characterInfo.character[2][2] = '\\';
 
-	characterInfo.ypos = LINES-3;
+	//characterInfo.ypos = LINES-3;
+	characterInfo.ypos = g_iGround;
 	characterInfo.state = STANDING;
 }
