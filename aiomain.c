@@ -17,6 +17,7 @@ void set_cr_noecho_mode();
 void set_nodelay_mode();
 char print_menu();
 void game_start();
+void print_rank();
 
 int done = 0;
 extern struct aiocb kbcbuf;
@@ -24,7 +25,7 @@ int main()
 {
 	int c;
 	char select;
-
+	int mode=2; //기본
 	tty_mode(0);
 	set_cr_noecho_mode();
 	initscr();
@@ -40,9 +41,10 @@ int main()
 				game_start();
 				break;
 			case '2':
+				mode=selectMode(mode);
 				break;
 			case '3':
-				
+				print_rank();
 				break;
 			case '4':
 				print_help_key();
