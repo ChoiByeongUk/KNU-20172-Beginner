@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include "character.h"
 #include "game_signal.h"
+
+void hMapRefresher();
 void show_character(int dist)
 {
 	int cnt = 0;
