@@ -1,5 +1,4 @@
 #include "rank.h"
-#include "game_main.c"
 
 user ranking[10];
 extern int main();

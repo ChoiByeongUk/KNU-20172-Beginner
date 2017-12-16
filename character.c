@@ -21,6 +21,8 @@ void show_character(int dist)
 					addch(characterInfo.character[i][j]);
 				}
 			}
+			
+			refresh();
 
 			for(i=0; i<3; i++)
 			{
@@ -28,7 +30,7 @@ void show_character(int dist)
 				addstr("   ");
 			}
 		characterInfo.ypos += dist;
-		usleep(5000)ear
+		usleep(5000);
 	}
 }
 

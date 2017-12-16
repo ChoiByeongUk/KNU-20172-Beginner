@@ -18,12 +18,11 @@ extern struct aiocb kbcbuf;
 
 char print_menu();
 void game_start();
-<<<<<<< HEAD
 void initScreen();
-=======
 void print_rank();
+int selectMode(int mode);
+void print_help_key(void);
 
->>>>>>> 9a5f331c0818d14a5db9f23257eb01931ff7fc8e
 int done = 0;
 
 int main()
