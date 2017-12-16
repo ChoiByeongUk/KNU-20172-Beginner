@@ -5,6 +5,8 @@
 #include "character.h"
 #include "game_signal.h"
 
+void hMapRefresher();
+
 void show_character(int dist)
 {
 	int cnt = 0;
@@ -22,13 +24,15 @@ void show_character(int dist)
 				}
 			}
 
+			move(0, COLS-1);
+			refresh();
 			for(i=0; i<3; i++)
 			{
 				move(characterInfo.ypos-2+i, 5);
 				addstr("   ");
 			}
 		characterInfo.ypos += dist;
-		usleep(5000)ear
+		usleep(5000);
 	}
 }
 
@@ -36,6 +40,7 @@ void move_character()
 {
 	void input_handler(int);
 	int movedir = 0;
+	signal(SIGALRM, SIG_IGN);
 	switch(characterInfo.state)
 	{
 		case JUMPING:
@@ -53,10 +58,11 @@ void move_character()
 	}
 	show_character(movedir);
 
+	//hMapRefresher(1);
+	preceed(1);
 	init_character_info();
+	signal(SIGALRM, move_character);
 }
-
-extern int g_iGround;
 
 void init_character_info()
 {
@@ -70,7 +76,6 @@ void init_character_info()
 	characterInfo.character[2][1] = ' ';
 	characterInfo.character[2][2] = '\\';
 
-	//characterInfo.ypos = g_iGround - 2;
-	characterInfo.ypos = 30;
+	characterInfo.ypos = LINES-5;
 	characterInfo.state = STANDING;
 }

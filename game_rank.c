@@ -1,39 +1,71 @@
+#include <curses.h>
+#include <stdio.h>
 #include "rank.h"
-#include "game_main.c"
-
 user ranking[10];
-extern int main();
 
 void print_back_menu(void)
 {
-	int input;
+	char  input;
+	clear();
 	do{
-		printf("back to manu(press '1')\n");
-		printf("reset ranking(press '2') : ");
-		scanf("%d",&input);
+		move(10,10);
+		addstr("back to manu(press '1')");
+		move(11,10);
+		addstr("reset ranking(press '2') : ");
+		refresh();
+
+		input = getch();
 		switch(input)
 		{
-			case 1:main();
-			break;
-			case 2:reset_rank();
-			break;
+			case '1':
+				return;
+			case '2':
+				reset_rank();
+				clear();
+				move(10,10);
+				addstr("reset completed");
+				refresh();
+				return;
 			default: 
-			printf(" press '1' or '2' please \n");
+				clear();
+				move(10,10);
+				addstr(" press '1' or '2' please ");
+				refresh();
 		}
-	}while(input!=1 || input!=2);
+	}while(input != '1' || input != '2');
 }
 
 void print_rank(void)
 {
 	int i;
+	int result;
+	clear();
 	for(i=0;i<10;i++)
 	{
 		if(ranking[i].name=="NULL")
-			printf("%d. \n",i++);
+		{
+			move(10+i, 10);
+			addch(i+'0');
+			addch('.');
+		}
 		else
-			printf(" %d. %s (%d) \n",i+1,ranking[i].name,ranking[i].score);
+		{
+			move(10+i, 10);
+			addch(' ');
+			addch(i+'0'+1);
+			addstr(". ");
+			addstr(ranking[i].name);
+			addstr(" (");
+			addch(ranking[i].score + '0');
+			addstr(" ) ");
+			refresh();
+			//addstr(" %d. %s (%d) \n",i+1,ranking[i].name,ranking[i].score);
+		}
+		
 	}
+	sleep(2);
 	print_back_menu();
+	return;
 }
 
 void set_rank(user person)
@@ -55,7 +87,10 @@ void reset_rank()
 {
 	int i;
 	for(i=0;i<10;i++)
-		ranking[i] = NULL;
+	{
+		memset(ranking[i].name, 0, sizeof(ranking[i].name));
+		ranking[i].score = 0;
+	}
 }
 
 void save_rank()
