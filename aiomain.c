@@ -9,49 +9,55 @@
 #include <fcntl.h>
 #include <sys/time.h>
 #include "character.h"
+#include "rank.h"
 
 void tty_mode(int);
 void set_cr_noecho_mode();
 void set_nodelay_mode();
 extern struct aiocb kbcbuf;
 
+void print_help_key();
+int selectMode(int);
 char print_menu();
-void game_start();
+void game_start(int);
 void initScreen();
 int done = 0;
 
 int main()
 {
 	int c;
+	int mode=2;
 	char select;
 
 	tty_mode(0);
 	set_cr_noecho_mode();
-	set_nodelay_mode();
 
 	initscr();
-	clear();
-	refresh();
-	select = print_menu();
+	while(1){
+		clear();
+		refresh();
+		select = print_menu();
 
-	initScreen();
-	switch(select)
-	{
-		case '1':
-			game_start();
-			break;
-		case '2':
-			tty_mode(1);
-			break;
-		case '3':
-			tty_mode(1);
-			break;
-		case '4':
-			tty_mode(1);
-			break;
-		case '5':
-			tty_mode(1);
-			exit(1);
+		initScreen();
+		switch(select)
+		{
+			case '1':
+				game_start(mode);
+				break;
+			case '2':
+				mode=selectMode(mode);
+				break;
+			case '3':
+				print_rank();
+				break;
+			case '4':
+				print_help_key();
+				break;
+			case '5':
+				endwin();
+				tty_mode(1);
+				exit(1);
+		}
 	}
 }
 

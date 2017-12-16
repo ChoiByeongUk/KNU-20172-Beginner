@@ -9,4 +9,9 @@ typedef struct user
 	int rank;
 }user;
 
-
+void print_back_menu();
+void print_rank();
+void set_rank(user);
+void reset_rank();
+void save_rank();
+void load_rank();

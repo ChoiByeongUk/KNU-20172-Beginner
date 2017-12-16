@@ -1,5 +1,8 @@
 #include <curses.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include "rank.h"
 user ranking[10];
 
@@ -100,7 +103,7 @@ void save_rank()
 	f1 = fopen("user_rank.txt","w");
 	for(i=0;i<10;i++)
 	{
-		fprintf("%d. %s %d\n",i+1,ranking[i].name,ranking[i].score);
+		fprintf(f1, "%d. %s %d\n",i+1,ranking[i].name,ranking[i].score);
 	}
 	fclose(f1);
 }
@@ -112,7 +115,8 @@ void load_rank()
 	f1 = fopen("user_rank.txt","r");
 	for(i=0;i<10;i++)
 	{
-		fscanf("%d. %s %d",&ranking[i].rank,ranking[i].name,&ranking[i].score);
+		fscanf(f1, "%d. %s %d",&ranking[i].rank,ranking[i].name,&ranking[i].score);
 	}
+	fclose(f1);
 }
 
