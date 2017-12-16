@@ -18,6 +18,7 @@ void ctrl_c_handler(int);
 void setup_aio_buffer();
 struct aiocb kbcbuf;
 void tty_mode(int);
+void set_nodelay_mode();
 extern int done;
 
 void game_start()
@@ -27,12 +28,12 @@ void game_start()
 	clear();
 	refresh();
 
+	set_nodelay_mode();	
 	signal(SIGINT, ctrl_c_handler);
 
 	signal(SIGIO, input_handler);
 	setup_aio_buffer();
 	aio_read(&kbcbuf);
-
 
 	signal(SIGALRM, move_character);
 	set_ticker(100);
