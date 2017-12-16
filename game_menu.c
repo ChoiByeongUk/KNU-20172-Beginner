@@ -7,7 +7,9 @@
 #include <signal.h>
 #include <aio.h>
 #include <unistd.h>
+#include <time.h>
 #include "character.h"
+
 #define CHECK addch('o');
 
 void game_start(int);
@@ -21,10 +23,13 @@ void set_nodelay_mode();
 void set_ticker(int);
 extern int done;
 void alarm_handler(int);
-void init_character_info();
+void initCharacter();
+
+int start, end;
 
 void game_start(int ease)
 {
+	initscr();
 	clear();
 	refresh();
 
@@ -34,34 +39,58 @@ void game_start(int ease)
 	setup_aio_buffer();
 	aio_read(&kbcbuf);
 	
-	init_character_info();
+	initCharacter();
 	signal(SIGALRM, alarm_handler);
 	set_ticker(100/ease);
+	start = time(NULL);
 
 	while(!done)
 		pause();
 
-	clear();
-	endwin();
 	tty_mode(1);
 }
+
+extern int g_iGround;
 
 void input_handler(int snum)
 {
 	int c;
 	char * cp = (char *)kbcbuf.aio_buf;
 
-	if(aio_error(&kbcbuf) == 0)	
+	if(aio_error(&kbcbuf) == 0)
+	{
 		if(aio_return(&kbcbuf) == 1)
 		{
 			c = *cp;
 			if(c == 'Q' || c == EOF)
 				done = 1;
 			else if(c == ' ')
-				characterInfo.state = JUMPING;
+			{
+				if(character.state == STANDING || character.state == SLIDING)
+					character.state = JUMPING;
+			}
 			else if(c == 'z')
-				characterInfo.state = SLIDING;
+			{
+				if(character.state == STANDING)
+					character.state = SLIDING;
+			}
 		}
+		else
+		{
+			if(character.state == JUMPING)
+			{
+				if(character.row < g_iGround - 1)
+					character.state = FALLING;
+			}
+			else if(character.state == FALLING)
+			{
+				if(character.row == g_iGround - 1)
+					character.state = STANDING;
+			}
+			else
+				character.state = STANDING;
+		}
+	}
 	aio_read(&kbcbuf);
 }
 
@@ -282,4 +311,3 @@ void setup_aio_buffer()
 	kbcbuf.aio_sigevent.sigev_notify = SIGEV_SIGNAL;
 	kbcbuf.aio_sigevent.sigev_signo = SIGIO;
 }
-

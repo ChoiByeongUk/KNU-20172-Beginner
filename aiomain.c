@@ -8,7 +8,6 @@
 #include <termios.h>
 #include <fcntl.h>
 #include <sys/time.h>
-#include "character.h"
 #include "rank.h"
 
 void tty_mode(int);
@@ -30,12 +29,12 @@ int main()
 	char select;
 
 	tty_mode(0);
-	set_cr_noecho_mode();
-
-	initscr();
+	load_rank();
 	while(1){
+		initscr();
 		clear();
 		refresh();
+		set_cr_noecho_mode();
 		select = print_menu();
 
 		initScreen();

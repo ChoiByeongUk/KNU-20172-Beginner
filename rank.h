@@ -9,6 +9,8 @@ typedef struct user
 	int rank;
 }user;
 
+user ranking[11];
+user recent;
 void print_back_menu();
 void print_rank();
 void set_rank(user);

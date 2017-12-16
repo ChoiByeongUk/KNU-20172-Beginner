@@ -1,19 +1,11 @@
-#define STANDING 0
-#define JUMPING 1
-#define SLIDING 2
-
-#define JUMP_DISTANCE 5
-
-typedef struct _characterInfo
+typedef struct person
 {
-	
-	char character[3][3];
-	int  ypos;
-	int state;
-}CharacterInfo;
+	int state, row, col;
+} person;
 
-CharacterInfo characterInfo;
+person character;
 
-void show_character();
-void move_character();
-void init_character_info();
+#define STANDING 1
+#define JUMPING 2
+#define SLIDING 3
+#define FALLING 4

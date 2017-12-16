@@ -4,87 +4,64 @@
 #include <unistd.h>
 #include "character.h"
 
-void show_character(int dist)
-{
-	int cnt = 0;
-	int i, j;
-	int k;
-
-	if(characterInfo.state == SLIDING)
-	{
-		move(characterInfo.ypos, 5);
-		addstr("--O");
-		move(LINES-1, COLS-1);
-		refresh();
-		usleep(50000);
-	}
-
-	else
-	{
-		for(k=0; k<2; k++)
-		{
-			characterInfo.ypos -= dist;
-				for(i=0; i<3; i++)
-				{
-					for(j=0; j<3; j++)
-					{
-						move(characterInfo.ypos - 2 + i, 5 + j);
-						addch(characterInfo.character[i][j]);
-					}
-				}
-
-				move(LINES-1, COLS-1);	
-				refresh();
-
-				for(i=0; i<3; i++)
-				{
-					move(characterInfo.ypos-2+i, 5);
-					addstr("   ");
-				}
-				usleep(5000);
-			characterInfo.ypos += dist;
-		}
-	}
-}
-
-void move_character()
-{
-	void input_handler(int);
-	int movedir = 0;
-	switch(characterInfo.state)
-	{
-		case JUMPING:
-			movedir = 3;
-			break;
-		case SLIDING:
-			characterInfo.character[0][1] = ' ';
-			characterInfo.character[1][0] = ' ';
-			characterInfo.character[1][1] = ' ';
-			characterInfo.character[1][2] = ' ';
-			characterInfo.character[2][0] = '-';
-			characterInfo.character[2][1] = '-';
-			characterInfo.character[2][2] = 'O';
-			break;
-	}
-	show_character(movedir);
-
-	init_character_info();
-}
-
 extern int g_iGround;
 
-void init_character_info()
+void initCharacter()
 {
-	characterInfo.character[0][0] = ' ';
-	characterInfo.character[0][1] = 'O';
-	characterInfo.character[0][2] = ' ';
-	characterInfo.character[1][0] = '-';
-	characterInfo.character[1][1] = '|';
-	characterInfo.character[1][2] = '-';
-	characterInfo.character[2][0] = '/';
-	characterInfo.character[2][1] = ' ';
-	characterInfo.character[2][2] = '\\';
+	character.state = 1;
+	character.row = g_iGround - 1;
+	character.col = 5;
+}
 
-	characterInfo.ypos = g_iGround - 1;
-	characterInfo.state = STANDING;
+void hCharacterRefresher()
+{
+	switch(character.state)
+	{
+		case STANDING:
+		{
+			mvaddstr(character.row - 2, character.col, " O ");
+			mvaddstr(character.row - 1, character.col, "/|\\");
+			mvaddstr(character.row, character.col, "/ \\");
+			break;
+		}
+		case JUMPING:
+		{
+			if(character.row > g_iGround - 6)
+			{
+				character.row--;
+				mvaddstr(character.row - 2, character.col, " O ");
+	                        mvaddstr(character.row - 1, character.col, "/|\\");
+        	                mvaddstr(character.row, character.col, "/ \\");
+				mvaddstr(character.row + 1, character.col, "   ");
+			}
+			else
+				character.state = FALLING;
+			break;
+		}
+		case SLIDING:
+		{
+			mvaddstr(character.row - 2, character.col, "   ");
+			mvaddstr(character.row - 1, character.col, "   ");
+			mvaddstr(character.row, character.col, "--O");
+			break;
+		}
+		case FALLING:
+		{
+			if(character.row < g_iGround - 1)
+                        {
+                                character.row++;
+                                mvaddstr(character.row - 2, character.col, " O ");
+                                mvaddstr(character.row - 1, character.col, "/|\\");
+                                mvaddstr(character.row, character.col, "/ \\");
+                                mvaddstr(character.row - 3, character.col, "   ");
+                        }
+                        else
+			{
+				mvaddstr(character.row - 3, character.col, "   ");
+				character.state = STANDING;
+			}
+			break;
+		}
+	}
+	move(LINES - 1, COLS - 1);
 }

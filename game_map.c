@@ -4,24 +4,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
-
-/***************************************************************
- * variable declaration
- */
-
-// terminal size
-int g_iMaxRow, g_iMaxCol;
-
-// map
-int g_iGround;
-
-// obstacle
-#define MAX_OBSTACLES 15
-typedef struct obstacle
-{
-	int type, row, col;
-} obstacle;
-obstacle obs[MAX_OBSTACLES];
+#include "game_map.h"
 
 /****************************************************************
  * function declaration
@@ -50,8 +33,8 @@ void initScreen()
 		obs[i].row = g_iGround;
 		obs[i].col = COLS;
 
-		while(i > 0 && abs(obs[i].col - obs[i - 1].col) < 16)
-			obs[i].col = COLS + (16 * (rand() % 7 + 1));
+		while(i > 0 && abs(obs[i].col - obs[i - 1].col) < 20)
+			obs[i].col = COLS + (20 * (rand() % 5 + 1));
 	}
 }
 
@@ -63,10 +46,10 @@ void addObstacle(int type, int r, int c)
 		// vertical obstacle
 		case 1:
 		{
-			move(r - 3, c);
-			vline('*', 3);
-			move(r - 3, c + 1);
-			vline(' ', 3);
+			move(r - 2, c);
+			vline('*', 2);
+			move(r - 2, c + 1);
+			vline(' ', 2);
 
 			break;
 		}
@@ -74,8 +57,8 @@ void addObstacle(int type, int r, int c)
 		case 2:
 		{
 			move(r - 3, c);
-			hline('*', 4);
-			mvaddch(r - 3, c + 4, ' ');
+			hline('*', 2);
+			mvaddch(r - 3, c + 2, ' ');
 
 			break;
 		}
@@ -110,12 +93,12 @@ void hMapRefresher(int signum)
 				{
 					if(obs[i].col == -1)
 					{
-						move(obs[i].row - 3, 0);
-						vline(' ', 3);
+						move(obs[i].row - 2, 0);
+						vline(' ', 2);
 					}
 
 					if(obs[i].col < -19)
-                                                obs[i].col = COLS + (16 * (rand() % 7 + 1));
+                                                obs[i].col = COLS + (20 * (rand() % 5 + 1));
 				}
 				obs[i].col--;
 				break;
@@ -130,10 +113,10 @@ void hMapRefresher(int signum)
                                 }
 				else
 				{
-					if(obs[i].col > -5)
-						mvaddch(obs[i].row - 3, obs[i].col + 4, ' ');
+					if(obs[i].col > -3)
+						mvaddch(obs[i].row - 3, obs[i].col + 2, ' ');
 					if(obs[i].col < -19)
-                                                obs[i].col = COLS + (16 * (rand() % 7 + 1));
+                                                obs[i].col = COLS + (20 * (rand() % 5 + 1));
 				}
 				obs[i].col--;
 				break;
