@@ -5,7 +5,12 @@
 #include "character.h"
 #include "game_signal.h"
 
+<<<<<<< HEAD
+extern int g_iGround;
+
+=======
 void hMapRefresher();
+>>>>>>> 078cd0c66f943326179f6fcdf8aa6dea57b0dd0d
 void show_character(int dist)
 {
 	int cnt = 0;
@@ -74,6 +79,11 @@ void init_character_info()
 	characterInfo.character[2][1] = ' ';
 	characterInfo.character[2][2] = '\\';
 
+<<<<<<< HEAD
+	//characterInfo.ypos = LINES-3;
+	characterInfo.ypos = g_iGround;
+=======
 	characterInfo.ypos = LINES-4;
+>>>>>>> 078cd0c66f943326179f6fcdf8aa6dea57b0dd0d
 	characterInfo.state = STANDING;
 }

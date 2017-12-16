@@ -17,7 +17,7 @@ void set_cr_noecho_mode();
 void set_nodelay_mode();
 char print_menu();
 void game_start();
-
+void restoreScreen();
 int done = 0;
 extern struct aiocb kbcbuf;
 int main()
