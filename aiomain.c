@@ -14,21 +14,47 @@
 void tty_mode(int);
 void set_cr_noecho_mode();
 void set_nodelay_mode();
-void ctrl_c_handler(int);
-void input_handler(int);
-void setup_aio_buffer();
+//void ctrl_c_handler(int);
+//void input_handler(int);
+//void setup_aio_buffer();
+char print_menu();
+void game_start();
 
-struct aiocb kbcbuf;
 int done = 0;
+extern struct aiocb kbcbuf;
 int main()
 {
 	int c;
-	
+	char select;
+
 	tty_mode(0);
 	set_cr_noecho_mode();
 	set_nodelay_mode();
+	initscr();
+	clear();
+	refresh();
 
-	init_character_info();
+	select = print_menu();
+
+	switch(select)
+	{
+		case '1':
+			game_start();
+			break;
+		case '2':
+			tty_mode(1);
+			break;
+		case '3':
+			tty_mode(1);
+			break;
+		case '4':
+			tty_mode(1);
+			break;
+		case '5':
+			tty_mode(1);
+			exit(1);
+	}
+	/*init_character_info();
 	initscr();
 	clear();
 	refresh();
@@ -47,10 +73,10 @@ int main()
 		pause();
 
 	tty_mode(1);
-	endwin();
+	endwin();*/
 }
 
-void input_handler(int snum)
+/*void input_handler(int snum)
 {
 	int c;
 	char * cp = (char *)kbcbuf.aio_buf;
@@ -73,7 +99,7 @@ void ctrl_c_handler(int signum)
 {
 	tty_mode(1);
 	exit(1);
-}
+}*/
 
 void tty_mode(int how)
 {
@@ -112,7 +138,7 @@ void set_nodelay_mode()
 	fcntl(0, F_SETFL, termflags);
 }
 
-void setup_aio_buffer()
+/*void setup_aio_buffer()
 {
 	static char input[1];
 
@@ -123,4 +149,4 @@ void setup_aio_buffer()
 
 	kbcbuf.aio_sigevent.sigev_notify = SIGEV_SIGNAL;
 	kbcbuf.aio_sigevent.sigev_signo = SIGIO;
-}
+}*/

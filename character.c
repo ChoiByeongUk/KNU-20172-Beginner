@@ -12,10 +12,7 @@ void show_character(int dist)
 	int k;
 	for(k=0; k<2; k++)
 	{
-		while(cnt < 3)
-		{
-			cnt++;
-
+		characterInfo.ypos -= dist;
 			for(i=0; i<3; i++)
 			{
 				for(j=0; j<3; j++)
@@ -27,29 +24,25 @@ void show_character(int dist)
 
 			move(0, COLS-1);
 			refresh();
-			usleep(3000);
-
 			for(i=0; i<3; i++)
 			{
 				move(characterInfo.ypos-2+i, 5);
 				addstr("   ");
 			}
-			characterInfo.ypos -= dist;
-		}
-		characterInfo.ypos ++;
-		dist *= -1;
-		cnt = 0;
+		characterInfo.ypos += dist;
+		usleep(5000);
 	}
 }
 
 void move_character()
 {
+	void input_handler(int);
 	int movedir = 0;
-	signal(SIGALRM, move_character);
+	signal(SIGALRM, SIG_IGN);
 	switch(characterInfo.state)
 	{
 		case JUMPING:
-			movedir = 1;
+			movedir = 3;
 			break;
 		case SLIDING:
 			characterInfo.character[0][1] = ' ';
@@ -64,6 +57,7 @@ void move_character()
 
 	show_character(movedir);
 	init_character_info();
+	signal(SIGALRM, move_character);
 }
 
 void init_character_info()
@@ -78,6 +72,6 @@ void init_character_info()
 	characterInfo.character[2][1] = ' ';
 	characterInfo.character[2][2] = '\\';
 
-	characterInfo.ypos = 10;
+	characterInfo.ypos = LINES-3;
 	characterInfo.state = STANDING;
 }
